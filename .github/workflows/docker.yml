@@ -29,7 +29,14 @@ jobs:
 
       - name: Arrêter le conteneur
         run: docker stop test-nginx
+      - name: Créer un artifact
+        run: echo "Pipeline de Amalth terminé" > resultat.txt
 
+      - name: Sauvegarder l'artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultat-pipeline
+          path: resultat.txt
   deploy:
     needs: build
     runs-on: ubuntu-24.04
