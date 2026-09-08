@@ -1,4 +1,5 @@
-name: Docker CI
+
+name: mon1pipeline
 
 on:
   push:
@@ -18,8 +19,23 @@ jobs:
 
       - name: Construire l'image Docker
         run: docker build -t mon-nginx .
+
       - name: Lancer le conteneur
         run: docker run -d --name test-nginx -p 8080:80 mon-nginx
 
-      - name: Tester Nginx
-        run: curl -f http://localhost:8080
+      - name: Tester l'image Docker
+        run: docker run -d -p 8081:80 --name test-nginx mon-nginx
+
+      - name: Vérifier le serveur
+        run: curl --fail http://localhost:8081
+
+      - name: Arrêter le conteneur
+        run: docker stop test-nginx
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Déploiement
+        run: echo "Déploiement réussi !"
