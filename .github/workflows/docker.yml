@@ -25,7 +25,9 @@ jobs:
           docker run -d -p 8081:80 --name test-nginx mon-nginx
 
       - name: Vérifier le serveur
-        run: curl --fail http://localhost:8081
+        run: |
+          sleep 2
+          curl --fail http://localhost:8081
 
       - name: Arrêter le conteneur
         run: docker stop test-nginx
