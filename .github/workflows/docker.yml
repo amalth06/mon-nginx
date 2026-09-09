@@ -32,7 +32,7 @@ jobs:
       - name: Tester l'image Docker
         run: |
           docker rm -f test-nginx || true
-          docker run -d -p 8081:80 --name test-nginx mon-nginx
+          docker run -d -p 8081:80 --name test-nginx mon-nginx:v1.0
 
       - name: Vérifier le serveur
         run: |
