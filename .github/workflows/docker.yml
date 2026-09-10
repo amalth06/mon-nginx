@@ -34,21 +34,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          push: false
           load: true
           tags: ghcr.io/amalth06/mon-nginx:v1.0
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-
-      - name: Scanner l'image avec Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/amalth06/mon-nginx:v1.0
-          format: table
-          exit-code: '1'
-          ignore-unfixed: true
-          severity: CRITICAL,HIGH
 
       - name: Tester l'image Docker
         run: |
@@ -59,6 +50,19 @@ jobs:
         run: |
           sleep 2
           curl --fail http://localhost:8081
+
+      - name: Scanner l'image avec Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/amalth06/mon-nginx:v1.0
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
+      - name: Publier l'image sur GHCR
+        run: docker push ghcr.io/amalth06/mon-nginx:v1.0
+
 
       - name: Arrêter le conteneur
         run: docker stop test-nginx
